@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
+import java.util.Scanner;
 
 public class FileOperation {
 
@@ -16,10 +16,12 @@ public class FileOperation {
     public FileOperation() {
         this.textContainer = new TextContainer();
     }
-/**
- * Открывает файл записывая его в TextContainer, но не выводит на экран
- * @param path принимает путь к файлу для открытия
- * */
+
+    /**
+     * Открывает файл записывая его в TextContainer, но не выводит на экран
+     *
+     * @param path принимает путь к файлу для открытия
+     */
     public void openFile(String path) {
         try (BufferedReader bufferedReader = new BufferedReader(
                 new FileReader(new File(path)))
@@ -57,17 +59,38 @@ public class FileOperation {
         }
     }
 
-    public void documentSearch() {
+    //TODO Узнать как перенести функционал во view
+    public void findWord(String word) {
+        Scanner scanner = new Scanner(System.in);
+        int operationNumber = 0;
+        int index;
 
+        OUT:
+        for (int i = 0; i < textContainer.getPages().size(); i++) {
+            index = 0;
+            index = textContainer.getPages().get(i).indexOf(word, index);
+            while (index != -1) {
+                System.out.printf("Слово %s найдено на %d странице, индекс %d", word, (i + 1), index);
+                System.out.println("\nИскать дальше 1, отмена поиска (Другое значение)");
+                operationNumber = Integer.parseInt(scanner.nextLine());
+                if (operationNumber == 1) {
+                    index = textContainer.getPages().get(i).indexOf(word, index + word.length());
+                } else {
+                    System.out.println("Поиск завершен");
+                    break OUT;
+                }
+            }
+            System.out.println("Поиск не дал результатов");
+        }
     }
 
-
-
-
-
-
-
-
+    public void replaceWord(String regex, String replacement) {
+        String s;
+        for (int i =0; i < textContainer.getPages().size(); i++) {
+            s = textContainer.getPages().get(i).replaceAll(regex,replacement);
+            textContainer.getPages().set(i,s);
+        }
+    }
 
     public TextContainer getTextContainer() {
         return textContainer;
