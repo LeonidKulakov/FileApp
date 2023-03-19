@@ -1,9 +1,10 @@
 package ru.kli.view;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-public class View {
+public class myView {
 
 
     public void showFileText(List<String> pages) throws NumberFormatException {
@@ -59,4 +60,13 @@ public class View {
             }
         }
     }
+
+    public void showDateLastChangeFile(Date date){
+        System.out.println("Дата последнего изменения выбранного файла: " + date);
+    }
+    public void showFileSizeBytes(String fileSize){
+        System.out.println("Размер выбранного файла: " + fileSize +" byte");
+
+    }
+
 }

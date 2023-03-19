@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Scanner;
 
 public class FileOperation {
@@ -86,12 +87,31 @@ public class FileOperation {
 
     public void replaceWord(String regex, String replacement) {
         String s;
-        for (int i =0; i < textContainer.getPages().size(); i++) {
-            s = textContainer.getPages().get(i).replaceAll(regex,replacement);
-            textContainer.getPages().set(i,s);
+        for (int i = 0; i < textContainer.getPages().size(); i++) {
+            s = textContainer.getPages().get(i).replaceAll(regex, replacement);
+            textContainer.getPages().set(i, s);
         }
     }
 
+    public Date getDateLastChangeFile(File file) {
+        return new Date(file.lastModified());
+    }
+
+    public String getFileSizeBytes(File file) {
+        return String.valueOf(file.length());
+    }
+
+    public void createNewFiles(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введи URI файла");
+        String uri = scanner.nextLine();
+        File file = new File(uri);
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public TextContainer getTextContainer() {
         return textContainer;
     }
