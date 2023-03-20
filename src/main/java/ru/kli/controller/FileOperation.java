@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class FileOperation {
+//    private static String tab = "";
 
     private TextContainer textContainer;
 
@@ -101,7 +102,7 @@ public class FileOperation {
         return String.valueOf(file.length());
     }
 
-    public void createNewFiles(){
+    public void createNewFiles() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введи URI файла");
         String uri = scanner.nextLine();
@@ -112,6 +113,28 @@ public class FileOperation {
             throw new RuntimeException(e);
         }
     }
+    //TODO убрать во view, но ХЗ корректно ли это
+    public void showAllFile(String dir, String tab) {
+        String newTab = tab + "        ";
+        File file = new File(dir);
+        File file2;
+        String[] arr = file.list();
+        for (String s : arr) {
+            file2 = new File(dir + "/" + s);
+            if (file2.isDirectory()) {
+                System.out.println(tab + s);
+                showAllFile(dir + "/" + s,newTab);
+            } else if (file2.isFile()) {
+                System.out.println(tab + s);
+            }else {
+                System.out.println(tab + s);
+                tab += "        ";
+                showAllFile(dir + "/" + s,newTab);
+            }
+        }
+
+    }
+
     public TextContainer getTextContainer() {
         return textContainer;
     }

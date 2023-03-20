@@ -26,6 +26,7 @@ import java.util.Date;
  * (Готово)
  * создание нового документа.
  * ------------------------------------------------------------------------------------------
+ * (Готово)
  * При старте проекта отображается структура коллекции.
  * ------------------------------------------------------------------------------------------
  * ------------Кроме уже перечисленных возможностей-----------------
@@ -48,17 +49,18 @@ public class Main {
         FileOperation fileOperation = new FileOperation();
         fileOperation.openFile("my_data_for_testing/song_testing_directory/song_text/rock/Перемен.txt");
         myView view = new myView();
-//        try {
-//            view.showFileText(fileOperation.getTextContainer().getPages());
-//        } catch (NumberFormatException e) {
-//            System.err.println("Ну здравствуйте");
-//        }
-//        fileOperation.findWord("Перемен");
-//        fileOperation.replaceWord("Перемен", "!!!!!!!!!!!!");
+        try {
+            view.showFileText(fileOperation.getTextContainer().getPages());
+        } catch (NumberFormatException e) {
+            System.err.println("Ну здравствуйте");
+        }
+        fileOperation.findWord("Перемен");
+        fileOperation.replaceWord("Перемен", "!!!!!!!!!!!!");
 
         Date date = fileOperation.getDateLastChangeFile(file);
         view.showDateLastChangeFile(date);
         view.showFileSizeBytes(fileOperation.getFileSizeBytes(file));
+        fileOperation.showAllFile("my_data_for_testing","");
 
 //        try (FileInputStream fileInputStream = new FileInputStream(
 //                "my_data_for_testing/text_tedting_directory/Эволюция Хакайна.docx"))
