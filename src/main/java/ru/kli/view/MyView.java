@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-public class myView {
+public class MyView {
 
 
     public void showFileText(List<String> pages) throws NumberFormatException {

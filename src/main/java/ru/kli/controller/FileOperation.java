@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class FileOperation {
-//    private static String tab = "";
+
 
     private TextContainer textContainer;
 

@@ -1,9 +1,12 @@
 package ru.kli;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import ru.kli.controller.FileOperation;
-import ru.kli.view.myView;
-import java.io.File;
-import java.util.Date;
+import ru.kli.enumData.UriEnum;
+import ru.kli.view.MyView;
+
+import java.util.Scanner;
 
 /**
  * Создать приложение «Коллекция текстовых документов».
@@ -38,30 +41,96 @@ import java.util.Date;
  * ------------------------------------------------------------------------------------------
  * сортировать коллекцию документов (по размеру, автору, дате создания).
  * ------------------------------------------------------------------------------------------
- *
  * !!!!!!!Хочу сделать дублирование в файл, что бы не загромождать код ифами!!!!!!!!
  * Интерфейс приложения должен позволять выводить результат работы приложения
-  * в консоль или файл. Приложение должно поддерживать интерфейс командной строки
+ * в консоль или файл. Приложение должно поддерживать интерфейс командной строки
  */
 public class Main {
+
+    /**
+     * Сохранение изменений??????????
+     * Что за задание корневой папки?????
+     * Отдельный контроллер для работы с текстом????
+     * Как понять кто автор?????
+     * Для сортировки нужно в корне пересмотреть концепцию приложения????
+     * Резонно ли выносить вывод данных в файл в отдельный функционал?????
+     * Инъекция view в controller, не нравится сама концепция, но вывод осуществить проще
+     * Расширение функционала для работы с docx по средствам apache poi
+     * */
+
+    private static final Logger LOGGER = Logger.getLogger(Main.class);
+
+
+
+
     public static void main(String[] args) {
-        File file = new File("my_data_for_testing/song_testing_directory/song_text/rock/Перемен.txt");
+        LOGGER.log(Level.INFO, "Старт приложения");
+
+        Scanner scanner = new Scanner(System.in);
         FileOperation fileOperation = new FileOperation();
-        fileOperation.openFile("my_data_for_testing/song_testing_directory/song_text/rock/Перемен.txt");
-        myView view = new myView();
-        try {
-            view.showFileText(fileOperation.getTextContainer().getPages());
-        } catch (NumberFormatException e) {
-            System.err.println("Ну здравствуйте");
+        MyView view = new MyView();
+        String path;
+
+        fileOperation.showAllFile(UriEnum.BASE_URI.getUri(), "");
+        int operation = 0;
+        while (operation != -1) {
+            System.out.println("Выбери операцию \n1-Показать структуру коллекции " +
+                    "\n2-Открыть документ \n3-Выполнить поиск по документу " +
+                    "\n4-заменить слово в документе \n5-Создание документа " +
+                    "\n6-посмотреть дату последнего изменения \n7-Посмотреть размер документа" +
+                    "\nЛюбой другой символ - Выход");
+            operation = checkOperation(scanner.nextLine());
+            switch (operation) {
+                case 1 -> {
+                    System.out.println("Введи путь и имя файла");
+                    path = UriEnum.BASE_URI.getUri();
+                    path += "/";
+                    path +=scanner.nextLine();
+                    System.out.println(path);
+                    fileOperation.openFile(path);
+                    //TODO обернуть
+                    view.showFileText(fileOperation.getTextContainer().getPages());
+                }
+                case 2 -> System.out.println("2");
+                case 3 -> System.out.println("3");
+                case 4 -> System.out.println("4");
+                case 5 -> System.out.println("5");
+                case 6 -> System.out.println("6");
+                case 7 -> System.out.println("7");
+            }
         }
-        fileOperation.findWord("Перемен");
-        fileOperation.replaceWord("Перемен", "!!!!!!!!!!!!");
+    }
 
-        Date date = fileOperation.getDateLastChangeFile(file);
-        view.showDateLastChangeFile(date);
-        view.showFileSizeBytes(fileOperation.getFileSizeBytes(file));
-        fileOperation.showAllFile("my_data_for_testing","");
+    public static int checkOperation(String oper) {
+        int operation = 0;
+        try {
+            operation = Integer.parseInt(oper);
+            if (operation < 1 || operation > 7)
+                operation = -1;
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+        return operation;
+    }
 
+//    public static void main(String[] args) {
+//        File file = new File("my_data_for_testing/song_testing_directory/song_text/rock/Перемен.txt");
+//        FileOperation fileOperation = new FileOperation();
+//        fileOperation.openFile("my_data_for_testing/song_testing_directory/song_text/rock/Перемен.txt");
+//        myView view = new myView();
+//        try {
+//            view.showFileText(fileOperation.getTextContainer().getPages());
+//        } catch (NumberFormatException e) {
+//            System.err.println("Ну здравствуйте");
+//        }
+//        fileOperation.findWord("Перемен");
+//        fileOperation.replaceWord("Перемен", "!!!!!!!!!!!!");
+//
+//        Date date = fileOperation.getDateLastChangeFile(file);
+//        view.showDateLastChangeFile(date);
+//        view.showFileSizeBytes(fileOperation.getFileSizeBytes(file));
+//        fileOperation.showAllFile("my_data_for_testing","");
+//
 //        try (FileInputStream fileInputStream = new FileInputStream(
 //                "my_data_for_testing/text_tedting_directory/Эволюция Хакайна.docx"))
 //        {
@@ -92,7 +161,5 @@ public class Main {
 //        } catch (Exception ex) {
 //            ex.printStackTrace();
 //        }
-
-
-    }
+//    }
 }
