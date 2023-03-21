@@ -69,7 +69,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         FileOperation fileOperation = new FileOperation();
         MyView view = new MyView();
-        String path;
+
 
         fileOperation.showAllFile(UriEnum.BASE_URI.getUri(), "");
         int operation = 0;
@@ -81,20 +81,27 @@ public class Main {
                     "\nЛюбой другой символ - Выход");
             operation = checkOperation(scanner.nextLine());
             switch (operation) {
-                case 1 -> {
-                    System.out.println("Введи путь и имя файла");
-                    path = UriEnum.BASE_URI.getUri();
-                    path += "/";
-                    path +=scanner.nextLine();
-                    System.out.println(path);
-                    fileOperation.openFile(path);
-                    //TODO обернуть
+                case 1 -> fileOperation.showAllFile(UriEnum.BASE_URI.getUri(), "");
+                case 2 -> {
+                    fileOperation.openFile(setPath());
+                    //TODO обернуть NumberFormatException
                     view.showFileText(fileOperation.getTextContainer().getPages());
                 }
-                case 2 -> System.out.println("2");
-                case 3 -> System.out.println("3");
-                case 4 -> System.out.println("4");
-                case 5 -> System.out.println("5");
+                case 3 -> {
+                    fileOperation.openFile(setPath());
+                    System.out.println("Введи слово для поиска");
+                    String word = scanner.nextLine();
+                    //TODO обернуть NumberFormatException
+                    fileOperation.findWord(word);
+                }
+                case 4 -> {
+                    System.out.println("Введи слово для замены");
+                    String regex = scanner.nextLine();
+                    System.out.println("Введи новое слово");
+                    String replacement = scanner.nextLine();
+                    fileOperation.replaceWord(regex,replacement);
+                }
+                case 5 -> fileOperation.createNewFiles();
                 case 6 -> System.out.println("6");
                 case 7 -> System.out.println("7");
             }
@@ -113,6 +120,15 @@ public class Main {
         return operation;
     }
 
+    private static String setPath(){
+        String path;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введи путь и имя файла");
+        path = UriEnum.BASE_URI.getUri();
+        path += "/";
+        path +=scanner.nextLine();
+        return path;
+    }
 //    public static void main(String[] args) {
 //        File file = new File("my_data_for_testing/song_testing_directory/song_text/rock/Перемен.txt");
 //        FileOperation fileOperation = new FileOperation();
