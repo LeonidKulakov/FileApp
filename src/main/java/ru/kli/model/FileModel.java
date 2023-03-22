@@ -5,11 +5,11 @@ import java.util.ArrayList;
 /**
  * Хранит в себе List страниц открытого файла
  * */
-public class TextContainer {
-
+public class FileModel {
+    private String fileName;
     private ArrayList<String> pages;
 
-    public TextContainer() {
+    public FileModel() {
         pages = new ArrayList<>();
     }
 
@@ -17,4 +17,11 @@ public class TextContainer {
         return pages;
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 }
