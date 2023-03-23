@@ -36,6 +36,7 @@ public class MyView {
                 case 7 -> showFileSizeBytes();
                 case 8 -> showFileText(fileOperation.getFileModel().getPages());
                 case 9 -> System.out.println(fileOperation.setBasePath());
+                case 10 -> showResultSaveFile();
             }
         }
     }
@@ -78,6 +79,13 @@ public class MyView {
             System.out.println("Файл успешно создан");
         } else {
             System.out.println("Файл не создан");
+        }
+    }
+    private void showResultSaveFile() {
+        if (fileOperation.createNewFiles()) {
+            System.out.println("Файл успешно сохранен");
+        } else {
+            System.out.println("Файл не сохранен");
         }
     }
 

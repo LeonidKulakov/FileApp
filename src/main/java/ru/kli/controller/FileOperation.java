@@ -6,16 +6,20 @@ import ru.kli.model.BaseDirectory;
 import ru.kli.model.FileModel;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
 public class FileOperation {
     private static final Logger LOGGER = Logger.getLogger(FileOperation.class);
+    public static final int MAX_OPERATION = 9;
     StringBuilder builder = new StringBuilder();
     private boolean fileIsOpen;
     public static final String TAB = "        ";
@@ -150,13 +154,31 @@ public class FileOperation {
         int operation = 0;
         try {
             operation = Integer.parseInt(scanner.nextLine());
-            if (operation < 1 || operation > 9)
+            if (operation < 1 || operation > MAX_OPERATION)
                 operation = -1;
         } catch (NumberFormatException e) {
             LOGGER.log(Level.ERROR, e.getMessage());
             return -1;
         }
         return operation;
+    }
+
+    public boolean saveText() {
+        if (fileIsOpen) {
+            for (String s : fileModel.getPages()) {
+                builder.append(s);
+            }
+            try (FileWriter writer = new FileWriter(
+                    (BaseDirectory.basePath + "/" + fileModel.getFileName()), false)) {
+                writer.write(builder.toString());
+                builder.setLength(0);
+                return true;
+            } catch (IOException e) {
+                LOGGER.log(Level.ERROR,e.getMessage());
+                return false;
+            }
+        } else
+            return false;
     }
 
     private String setPath() {

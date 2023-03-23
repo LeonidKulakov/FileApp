@@ -40,3 +40,7 @@
 2023-03-22 17:33:13 INFO  Main:67 - Старт приложения
 2023-03-22 18:58:54 ERROR FileOperation:55 - my_data_for_testing\1 (Не удается найти указанный файл)
 2023-03-22 18:59:24 ERROR FileOperation:55 - my_data_for_testing\e (Не удается найти указанный файл)
+2023-03-23 15:54:12 INFO  Main:21 - Старт программы
+2023-03-23 15:54:42 ERROR FileOperation:64 - my_data_for_testing\1 (Не удается найти указанный файл)
+2023-03-23 15:54:48 ERROR FileOperation:160 - For input string: "й"
+2023-03-23 15:54:48 INFO  Main:25 - Завершение программы
