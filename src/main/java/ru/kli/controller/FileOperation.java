@@ -6,33 +6,32 @@ import ru.kli.model.BaseDirectory;
 import ru.kli.model.FileModel;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
 public class FileOperation {
+    private static FileOperation fileOperation;
     private static final Logger LOGGER = Logger.getLogger(FileOperation.class);
     public static final int MAX_OPERATION = 9;
     StringBuilder builder = new StringBuilder();
     private boolean fileIsOpen;
+
     public static final String TAB = "        ";
     private FileModel fileModel;
 
-    public FileOperation() {
+    private FileOperation() {
         this.fileModel = new FileModel();
-        fileIsOpen = false;
+        this.fileIsOpen = false;
     }
 
 
-    public boolean openFile() {
-        String path = setPath();
+    public boolean openFile(String path) {
         fileModel.setFileName(path);
         try (BufferedReader bufferedReader = new BufferedReader(
                 new FileReader(new File(path)))
@@ -69,9 +68,7 @@ public class FileOperation {
         }
     }
 
-    public ArrayList<Integer> findWord() {
-        Scanner scanner = new Scanner(System.in);
-        String word = scanner.nextLine();
+    public ArrayList<Integer> findWord(String word) {
         int index;
         ArrayList<Integer> indexAndPage = new ArrayList<>();
         for (int i = 0; i < fileModel.getPages().size(); i++) {
@@ -86,10 +83,7 @@ public class FileOperation {
         return indexAndPage;
     }
 
-    public void replaceWord() {
-        Scanner scanner = new Scanner(System.in);
-        String regex = scanner.nextLine();
-        String replacement = scanner.nextLine();
+    public void replaceWord(String regex, String replacement) {
         String s;
         for (int i = 0; i < fileModel.getPages().size(); i++) {
             s = fileModel.getPages().get(i).replaceAll(regex, replacement);
@@ -97,9 +91,9 @@ public class FileOperation {
         }
     }
 
-    public Date getDateLastChangeFile() {
+    public String getDateLastChangeFile() {
         File file = new File(fileModel.getFileName());
-        return new Date(file.lastModified());
+        return new Date(file.lastModified()).toString();
     }
 
     public String getFileSizeBytes() {
@@ -107,10 +101,8 @@ public class FileOperation {
         return String.valueOf(file.length());
     }
 
-    public boolean createNewFiles() {
-        Scanner scanner = new Scanner(System.in);
-        String uri = scanner.nextLine();
-        File file = new File(uri);
+    public boolean createNewFiles(String fileName) {
+        File file = new File(fileName);
         try {
             file.createNewFile();
             return true;
@@ -123,6 +115,7 @@ public class FileOperation {
     private String getDirectoryTree(String dir, String tab) {
         var sb = new StringBuilder();
         sb.append(tab).append(TAB);
+        System.out.println(dir);
         File file = new File(dir);
         String[] arr = file.list();
         for (String s : arr) {
@@ -146,6 +139,7 @@ public class FileOperation {
     public String getDirectoryTrees(String dir, String tab) {
         String s = getDirectoryTree(dir, tab);
         builder.setLength(0);
+        System.out.println(" 121"+builder.toString());
         return s;
     }
 
@@ -174,13 +168,30 @@ public class FileOperation {
                 builder.setLength(0);
                 return true;
             } catch (IOException e) {
-                LOGGER.log(Level.ERROR,e.getMessage());
+                LOGGER.log(Level.ERROR, e.getMessage());
                 return false;
             }
         } else
             return false;
     }
 
+    public String showFileText(int pageNumber) {
+        try {
+            return fileModel.getPages().get(pageNumber - 1);
+        } catch (NumberFormatException e) {
+            LOGGER.log(Level.ERROR, e.getMessage());
+            return "Не корректный ввод";
+        } catch (IndexOutOfBoundsException e) {
+            LOGGER.log(Level.ERROR, e.getMessage());
+            return "Страницы закончились";
+        }
+    }
+    public String setBasePath(String basePath) {
+        BaseDirectory.basePath = basePath;
+        return "Базовая директория изменена, новая директория " + basePath;
+    }
+
+    // Дальше гетторы сетторы
     private String setPath() {
         String path;
         Scanner scanner = new Scanner(System.in);
@@ -190,12 +201,7 @@ public class FileOperation {
         return path;
     }
 
-    public String setBasePath() {
-        Scanner scanner = new Scanner(System.in);
-        String s = scanner.nextLine();
-        BaseDirectory.basePath = s;
-        return "Базовая директория изменена, новая директория " + s;
-    }
+
 
     public FileModel getFileModel() {
         return fileModel;
@@ -203,5 +209,12 @@ public class FileOperation {
 
     public boolean isFileIsOpen() {
         return fileIsOpen;
+    }
+
+    public static FileOperation getFileOperation() {
+        if (fileOperation == null) {
+            fileOperation = new FileOperation();
+        }
+        return fileOperation;
     }
 }
