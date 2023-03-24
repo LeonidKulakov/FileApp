@@ -30,8 +30,8 @@ public class SimpleGUI extends JFrame {
     private JButton buttonSave = new JButton("Сохранить файл");
     private JButton buttonPresentation = new JButton("Старт презентации");
     private JButton buttonPush = new JButton("Нажми меня");
-    private JTextField input = new JTextField("Основное поле для ввода", 5);
-    private JLabel label = new JLabel("Поля для ввода");
+    private JTextField input = new JTextField(null, 5);
+    private JLabel label = new JLabel("Поле для ввода корневой папки или файла для открытия");
 
 
     public SimpleGUI() {
