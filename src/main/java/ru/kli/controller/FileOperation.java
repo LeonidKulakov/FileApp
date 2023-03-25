@@ -115,7 +115,6 @@ public class FileOperation {
     private String getDirectoryTree(String dir, String tab) {
         var sb = new StringBuilder();
         sb.append(tab).append(TAB);
-        System.out.println(dir);
         File file = new File(dir);
         String[] arr = file.list();
         for (String s : arr) {
@@ -139,7 +138,6 @@ public class FileOperation {
     public String getDirectoryTrees(String dir, String tab) {
         String s = getDirectoryTree(dir, tab);
         builder.setLength(0);
-        System.out.println(" 121"+builder.toString());
         return s;
     }
 
