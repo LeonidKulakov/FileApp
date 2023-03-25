@@ -18,6 +18,7 @@ import javax.swing.*;
 
 public class SimpleGUI extends JFrame {
 
+    private FunnyDance dance;
     private JButton buttonTree = new JButton("Показать структуру коллекции");
     private JButton buttonOpenFile = new JButton("Открыть документ");
     private JButton buttonFindWord = new JButton("Выполнить поиск по документу");
@@ -36,7 +37,11 @@ public class SimpleGUI extends JFrame {
 
     public SimpleGUI() {
         super("Hello dummy");
-        this.setBounds(400, 200, 800, 300);
+        JOptionPane.showMessageDialog(null,
+                "Весь функционал представленный в данном " +
+                        "приложении направлен сугубо на изучение работы с файлами " +
+                        "и возможностей со swing");
+        this.setBounds(400, 100, 800, 300);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         Container container = this.getContentPane();
@@ -67,6 +72,7 @@ public class SimpleGUI extends JFrame {
         container.add(buttonPresentation);
         buttonPush.addActionListener(new ButtonPush());
         container.add(buttonPush);
+        dance = new FunnyDance();
     }
 
     public JTextField getInput() {
