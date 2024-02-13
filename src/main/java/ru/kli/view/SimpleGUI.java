@@ -38,9 +38,9 @@ public class SimpleGUI extends JFrame {
     public SimpleGUI() {
         super("Hello dummy");
         JOptionPane.showMessageDialog(null,
-                "Весь функционал представленный в данном " +
+                "ДИСКЛЕЙМЕР!!! Весь функционал представленный в данном " +
                         "приложении направлен сугубо на изучение работы с файлами " +
-                        "и возможностей со swing");
+                        "и возможностей swing");
         this.setBounds(400, 100, 800, 300);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

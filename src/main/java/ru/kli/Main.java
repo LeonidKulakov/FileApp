@@ -1,10 +1,9 @@
 package ru.kli;
-
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import ru.kli.view.SimpleGUI;
 
-public class Main {
+public class Main  {
 
     private static final Logger LOGGER = Logger.getLogger(Main.class);
 
@@ -13,6 +12,7 @@ public class Main {
         SimpleGUI simpleGUI = new SimpleGUI();
         simpleGUI.setVisible(true);
         LOGGER.log(Level.INFO, "Завершение программы");
+
     }
 
 }

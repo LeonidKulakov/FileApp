@@ -2,17 +2,23 @@ package ru.kli.controller;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import ru.kli.model.BaseDirectory;
 import ru.kli.model.FileModel;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class FileOperation {
@@ -33,6 +39,15 @@ public class FileOperation {
 
     public boolean openFile(String path) {
         fileModel.setFileName(path);
+        fileModel.getPages().clear();
+        if (path.split("\\.")[1].equals("docx"))
+            return openDocx(path);
+        else if ((path.split("\\.")[1].equals("txt")))
+            return openTxt(path);
+        return false;
+    }
+
+    private boolean openTxt(String path) {
         try (BufferedReader bufferedReader = new BufferedReader(
                 new FileReader(new File(path)))
         ) {
@@ -66,6 +81,27 @@ public class FileOperation {
             LOGGER.log(Level.ERROR, e.getMessage());
             return false;
         }
+    }
+
+    public boolean openDocx(String path) {
+        try (FileInputStream fileInputStream = new FileInputStream(path)) {
+            XWPFDocument docxFile = new XWPFDocument(OPCPackage.open(fileInputStream));
+            List<XWPFParagraph> paragraphs = docxFile.getParagraphs();
+            var sb = new StringBuilder();
+            int counter = 0;
+            for (XWPFParagraph p : paragraphs) {
+                sb.append(p.getText()).append("\n");
+               if (++counter>9) {
+                   fileModel.getPages().add(sb.toString());
+                   sb.setLength(0);
+                   counter=0;
+               }
+            }
+            fileModel.getPages().add(sb.toString());
+        } catch (Exception e) {
+            LOGGER.log(Level.ERROR, e.getMessage());
+        }
+        return true;
     }
 
     public ArrayList<Integer> findWord(String word) {
@@ -184,6 +220,7 @@ public class FileOperation {
             return "Страницы закончились";
         }
     }
+
     public String setBasePath(String basePath) {
         BaseDirectory.basePath = basePath;
         return "Базовая директория изменена, новая директория " + basePath;
@@ -198,7 +235,6 @@ public class FileOperation {
         path += scanner.nextLine();
         return path;
     }
-
 
 
     public FileModel getFileModel() {
